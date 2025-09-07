@@ -1,105 +1,263 @@
-<h1 align="center"><p style="display: inline-flex; align-items: center; gap: 0.25em"><img style="width: 1.5em; height: 1.5em;" src="public/icons/favicon.png">wplacer</p></h1>
+# WPlacer - Modular Pixel Art Placement Tool
 
-<p align="center"><img src="https://img.shields.io/github/package-json/v/luluwaffless/wplacer">
-<a href="LICENSE"><img src="https://img.shields.io/github/license/luluwaffless/wplacer"></a>
-<a href="https://discord.gg/qbtcWrHJvR"><img src="https://img.shields.io/badge/Support-gray?style=flat&logo=Discord&logoColor=white&logoSize=auto&labelColor=5562ea"></a>
-<a href="LEIAME.md"><img src="https://img.shields.io/badge/tradução-português_(brasil)-green"></a>
-<a href="LISEZMOI.md"><img src="https://img.shields.io/badge/traduction-français-blue"></a>
-<a href="README_zh-cn.md"><img src="https://img.shields.io/badge/翻译-简体中文-blue"></a></p>
+A refactored, modular version of WPlacer - an automated pixel art placement tool for collaborative canvas projects like r/place.
 
-A massively updated auto-drawing bot for [wplace.live](https://wplace.live/).
+## 🚀 What's New in v5.4.0
 
-## Features ✅
+This version represents a complete architectural refactor with the following improvements:
 
--   **Simple and easy-to-use web UI:** For managing users and templates
--   **Advanced Multi-Account System:** Run templates with multiple users simultaneously. The system intelligently prioritizes users with the most charges available to maximize efficiency.
--   **Multiple Drawing Modes:** Choose from several drawing strategies (Top to Bottom, Bottom to Top, Edges First, Color-By-Color, etc.) to optimize your approach for different templates.
--   **Automatic Upgrade Purchasing:** If enabled, the bot will automatically purchase max charge upgrades or extra charges when running out for your accounts whenever they have enough droplets.
--   **Account Status Checker:** A tool in the "Manage Users" tab allows you to quickly check if your accounts' cookies are still valid.
--   **Advanced Template Controls:** Options such as restarting, replacing a template's image, or pausing on the fly make management more flexible as well as providing you with real time updates on the template's status.
--   **Automatic Captcha (Turnstile) Token Handling:** Turnstile handling lets you babysit the bot much less
--   **Desktop Notifications:** The program will now send a desktop notification when it needs a new Turnstile token, so you don't have to constantly check the console.
+### ✨ Key Features
+- **Modular Backend Architecture**: Clean separation of concerns with dedicated services
+- **Enhanced Pawtect Integration**: Improved security and token management
+- **Component-Based Frontend**: Modern, maintainable UI components
+- **Restructured Browser Extension**: Better organization and reliability
+- **Improved Error Handling**: Comprehensive error management system
+- **Real-time Updates**: WebSocket-based live logging and status updates
 
-## Installation and Usage 💻
+## 📁 Project Structure
 
-[Video Tutorial](https://www.youtube.com/watch?v=YR978U84LSY)
+```
+wplacer/
+├── src/                          # Backend Node.js modules
+│   ├── config/
+│   │   ├── constants.js         # All constants (URLs, timeouts, etc.)
+│   │   ├── settings.js          # Settings management
+│   │   └── environment.js       # Environment variables
+│   ├── core/
+│   │   ├── wplacer-client.js    # WPlacer HTTP client class
+│   │   ├── template-manager.js  # Template processing logic
+│   │   ├── token-manager.js     # Token management
+│   │   └── charge-cache.js      # User charge system
+│   ├── utils/
+│   │   ├── logger.js           # Logging system
+│   │   ├── file-ops.js         # File operations
+│   │   ├── codec.js            # Template compression
+│   │   ├── palette.js          # Color management
+│   │   ├── network.js          # Network utilities
+│   │   └── time.js             # Time/duration helpers
+│   ├── services/
+│   │   ├── proxy-service.js    # Proxy management
+│   │   ├── user-service.js     # User operations
+│   │   ├── template-service.js # Template operations
+│   │   ├── keep-alive.js       # Session maintenance
+│   │   ├── queue-processor.js  # Template queue
+│   │   └── pawtect-service.js  # Pawtect integration
+│   ├── api/
+│   │   ├── routes/
+│   │   │   ├── index.js        # Route aggregation
+│   │   │   ├── users.js        # User endpoints
+│   │   │   ├── templates.js    # Template endpoints
+│   │   │   ├── settings.js     # Settings endpoints
+│   │   │   ├── colors.js       # Color ordering
+│   │   │   └── system.js       # System/logs endpoints
+│   │   ├── middleware/
+│   │   │   ├── auth.js         # Authentication
+│   │   │   ├── validation.js   # Input validation
+│   │   │   └── error-handler.js # Error handling
+│   │   └── websocket/
+│   │       └── log-streamer.js # WebSocket logs
+│   ├── models/
+│   │   ├── user.js             # User model
+│   │   ├── template.js         # Template model
+│   │   └── settings.js         # Settings model
+│   ├── errors/
+│   │   ├── base-error.js       # Base error class
+│   │   ├── network-error.js    # Network errors
+│   │   └── suspension-error.js # Suspension errors
+│   └── server.js               # Main server entry point
 
-### Requirements:
-- [Node.js and NPM](https://nodejs.org/en/download)
-- [Tampermonkey](https://www.tampermonkey.net/)
-- [git](https://git-scm.com/downloads) (optional, but recommended)
-### Installation:
-1. Download the repository using [git](https://git-scm.com/downloads) (`git clone https://github.com/luluwaffless/wplacer.git`) or download the ZIP directly from GitHub (not recommended).
-1. In the terminal, navigate to the project directory and install the dependencies with `npm i`.
-1. Install the extension on each browser window with an account you want to be used by wplacer and to automatically solve Turnstiles (CAPTCHAs) by going to the extensions page of your browser, turning on developer mode, pressing load unpacked, and then selecting the LOAD_UNPACKED folder included with wplacer.
-- If you'd like, you can change the host and port of the local server by changing the `.env` file.
-### Usage:
-1. To start the bot, run `npm start` in the terminal.
-1. Open the URL printed in the console (usually `http://127.0.0.1/`) in your browser.
-1. In each browser window with the extension installed, log into your account on wplace.live. If your account does not show up in the manager after refreshing it, you can press on the extension to manually send it to wplacer.
-1. Go to the "Add Template" page to create your drawing templates.
-   - The coordinates (`Tile X/Y`, `Pixel X/Y`) are for the top-left corner of your image. You can find these by clicking a pixel on wplace.live and inspecting the `pixel` request in the Network tab of DevTools. You can also use the [Blue Marble](https://github.com/SwingTheVine/Wplace-BlueMarble) userscript (user TamperMonkey) to see a pixel's coordinates.
-   - You can assign multiple users to a single template.
-1. Finally, go to "Manage Templates" and click "Start" on any template to begin drawing.
-   - The script will occasionally refresh one of the active bot windows on [wplace.live](https://wplace.live/). This is required to refresh the Turnstile token needed for painting.
+├── client/                       # Frontend modules
+│   ├── js/
+│   │   ├── components/         # UI Components
+│   │   │   ├── dashboard/      # Dashboard components
+│   │   │   ├── modals/         # Modal components
+│   │   │   ├── editors/        # Editor components
+│   │   │   └── shared/         # Shared components
+│   │   ├── services/
+│   │   │   ├── api-client.js   # Backend API wrapper
+│   │   │   └── websocket.js    # WebSocket management
+│   │   ├── utils/
+│   │   │   ├── dom.js          # DOM helpers
+│   │   │   └── validation.js   # Form validation
+│   │   └── app.js              # Main application entry
+│   ├── css/                    # Stylesheets
+│   └── assets/                 # Static assets
 
-# FAQ and Common Errors 🤔
-### Browser:
-- **The best supported browser is Brave, which you can get here: <https://brave.com/download/>**
-- Chrome works, but is not reccomended. (zero fingerprint protection - high ban chance)
-- Firefox is not supported.
-  
-### How to get your JWT token:
-Go to [wplace.live](<https://wplace.live>), login, click anywhere on the map, then press `Ctrl` + `Shift` + `i`, go to `Application`, find the `j` column, then copy the value inside
+├── extension/                    # Browser extension (reorganized)
+│   ├── src/
+│   │   ├── background/
+│   │   │   └── service-worker.js
+│   │   ├── content/
+│   │   │   └── content-script.js
+│   │   ├── popup/
+│   │   │   ├── popup.js
+│   │   │   ├── popup.html
+│   │   │   └── popup.css
+│   │   └── shared/
+│   │       ├── constants.js
+│   │       └── utils.js
+│   ├── icons/                  # Extension icons
+│   ├── pawtect_inject.js       # Pawtect injection script
+│   └── manifest.json
 
-### How to install the extension:
-Go to the manage extensions tab, enable Developer mode, then click load unpacked, select the `LOAD_UNPACKED` folder.
-After that, make sure to click on the extension in wplace.live, and configure your port if you changed it in `.env`
+├── public/                       # Static files (reorganized)
+│   ├── index.html
+│   ├── favicon.ico
+│   └── assets/                # Combined assets
 
-### How to run the bot:
-1. Simply open `start.bat`.
-2. Open a command prompt in the wplacer folder. You can type `cmd` in the address bar in the file explorer to do this. Run `npm i` in the command prompt, then after run `npm start`.
-  - If you get any errors while running `npm i`, run this: `Set-ExecutionPolicy -Scope CurrentUser Bypass` then you can run `npm i`
+├── data/                         # Keep existing data structure
+├── python_solver/               # Python API server
+└── package.json
+```
 
-### How to add proxies:
-You need to find your own proxy provider, and once you do you must follow this format: `protocol://ip:port` or `protocol://user:pass:ip:port`
-Example: `socks5://127.0.0.1:9050`
-Example: `socks5://user:admin:127.0.0.1:9050`
+## 🛠️ Installation & Setup
 
-### Why is it stuck on waiting for a token?
-You must have at least one tab open to [wplace](<https://wplace.live>). You need a macro or something else that will automatically click the turnstile checkboxes.
+### Prerequisites
+- Node.js >= 22.0.0
+- npm >= 10.0.0
 
-### I keep getting error 500:
-Two things will cause this, [wplace.live](<https://wplace.live>) being down, or your token is expired.
-- To check if wplace is down, go here: <https://status.wplace.lol/>
-- If its up, re-add your token by doing the first step.
-- If NEITHER are an issue, then its probably something in the code is wrong. Open an issue or tell them in the support server and it should be fixed in future updates.
+### Backend Setup
+```bash
+# Install dependencies
+npm install
 
-### ERR_MODULE_NOT_FOUND:
-One of your modules are missing. To install them, simply use `npm i`.
+# Start the server
+npm start
 
-**We will NOT provide support for other forks of this project. Ask the respective developers.**
+# Development mode with auto-reload
+npm run dev
+```
 
-## Notes 📝
+### Browser Extension Setup
+1. Open Chrome/Edge and go to `chrome://extensions/`
+2. Enable "Developer mode"
+3. Click "Load unpacked" and select the `extension/` directory
+4. The extension will be loaded and ready to use
 
-> [!CAUTION]
-> This bot is not affiliated with [wplace.live](https://wplace.live/) and its use may be against the site's rules. The developers are not responsible for any punishments against your accounts. Use at your own risk.
+### Frontend Development
+The frontend is now modular and uses ES6 modules. The main entry point is `client/js/app.js`.
 
-### To-dos ✅
-- [x] ~~Proxy support~~
-- [x] ~~Add support for paid colors~~
-- [x] ~~Support for painting between multiple tiles~~
-- [x] ~~Easier multi-account support for one template~~
-- [x] ~~Queueing system for multi-accounts~~
+## 🔧 Configuration
 
-### Credits 🙏
+### Environment Variables
+Create a `.env` file in the root directory:
+```env
+PORT=80
+NODE_ENV=production
+```
 
--   [Jinx](https://github.com/JinxTheCatto) [(Donate here to help us develop the project :3)](https://ko-fi.com/jinxthecat)
--   [luluwaffless](https://github.com/luluwaffless) [(Donate here to help us develop the project)](https://ko-fi.com/luluwaffless)
+### Extension Settings
+The extension automatically detects the WPlacer server on `127.0.0.1:80`. You can modify the port in the extension popup if needed.
 
-And to our amazing contributors!
-<p align="center"><img src="https://contrib.rocks/image?repo=luluwaffless/wplacer"></p>
+## 🚀 New Features
 
-### License 📜
+### Enhanced Pawtect Integration
+- Dedicated `PawtectService` for token management
+- Improved security and reliability
+- Better error handling and logging
 
-[GNU AGPL v3](LICENSE)
+### Modular Frontend
+- Component-based architecture
+- Real-time WebSocket updates
+- Improved user experience
+- Better error handling and notifications
+
+### Restructured Extension
+- Manifest V3 compliance
+- Better organization and maintainability
+- Improved token capture reliability
+- Enhanced popup interface
+
+### API Improvements
+- RESTful API design
+- Comprehensive error handling
+- Input validation middleware
+- Rate limiting and security
+
+## 📊 API Endpoints
+
+### Users
+- `GET /api/users` - Get all users
+- `POST /api/users` - Add new user
+- `DELETE /api/users/:id` - Delete user
+- `GET /api/users/status/:id` - Check user status
+
+### Templates
+- `GET /api/templates` - Get all templates
+- `POST /api/templates` - Create template
+- `PUT /api/templates/:id` - Update template
+- `DELETE /api/templates/:id` - Delete template
+- `POST /api/templates/import` - Import template
+
+### Settings
+- `GET /api/settings` - Get settings
+- `PUT /api/settings` - Update settings
+
+### System
+- `GET /api/system/token-needed` - Check if token needed
+- `POST /api/system/token` - Submit token
+- `GET /api/system/pawtect-status` - Get pawtect status
+- `GET /api/system/logs` - Get logs
+- `GET /api/system/errors` - Get error logs
+
+## 🔄 Migration from v5.3.0
+
+The refactored version maintains full compatibility with existing data files:
+- `data/users.json` - User data
+- `data/templates.json` - Template data
+- `data/settings.json` - Settings
+- `data/color_ordering.json` - Color ordering
+- `data/proxies.txt` - Proxy list
+
+No manual migration is required - the system will automatically load and use existing data.
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Extension not capturing tokens**
+   - Ensure the extension is loaded and enabled
+   - Check that you're on `wplace.live`
+   - Verify the WPlacer server is running
+
+2. **Server connection issues**
+   - Check if the server is running on the correct port
+   - Verify firewall settings
+   - Check browser console for errors
+
+3. **Template import/export issues**
+   - Ensure share codes are valid
+   - Check template dimensions and data format
+   - Verify color palette compatibility
+
+### Debug Mode
+Enable debug logging by setting `NODE_ENV=development` in your environment.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the AGPL-3.0-only License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Original WPlacer by luluwaffless and JinxTheCatto
+- Community contributors and testers
+- r/place community for inspiration
+
+## 📞 Support
+
+- GitHub Issues: [Report bugs and request features](https://github.com/luluwaffless/wplacer/issues)
+- Documentation: Check the wiki for detailed guides
+- Community: Join our Discord for support and discussions
+
+---
+
+**Note**: This is a refactored version of WPlacer with improved architecture and maintainability. All core functionality remains the same while providing a better development experience and more reliable operation.
+**Note**: I DO NOT GUARANTEE THAT THIS WORK LMAO

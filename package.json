@@ -1,13 +1,13 @@
 {
   "name": "wplacer",
   "version": "5.3.0",
-  "main": "server.js",
+  "main": "src/server.js",
   "type": "module",
   "author": "luluwaffless and JinxTheCatto",
   "license": "AGPL-3.0-only",
   "funding": "https://ko-fi.com/luluwaffless and https://ko-fi.com/jinxthecat",
   "scripts": {
-    "start": "node --env-file=.env ."
+    "start": "node --env-file=.env src/server.js"
   },
   "dependencies": {
     "canvas": "^3.2.0",

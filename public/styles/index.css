@@ -192,6 +192,41 @@ button:disabled, button[disabled] {
     color: #888 !important;
 }
 
+button.loading {
+    position: relative;
+    color: transparent !important;
+}
+
+button.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+button.success {
+    background-color: var(--success-color) !important;
+    color: white !important;
+}
+
+button.error {
+    background-color: var(--error-color) !important;
+    color: white !important;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .primary-button {
     background-color: var(--accent-primary);
     color: white;
@@ -741,4 +776,116 @@ input:checked + .slider:before {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 20px 10px;
+    }
+    
+    .container {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .coordinate-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    #templateList {
+        grid-template-columns: 1fr;
+    }
+    
+    .template-actions, .template-actions-all {
+        flex-direction: column;
+    }
+    
+    .template-actions button {
+        width: 100%;
+    }
+    
+    .logs-controls {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .logs-search, .logs-type-filter {
+        margin-left: 0;
+    }
+    
+    .color-grid {
+        grid-template-columns: repeat(auto-fill, 60px);
+        gap: 8px;
+    }
+    
+    .color-item {
+        width: 60px;
+        height: 60px;
+        font-size: 8px;
+    }
+    
+    .color-swatch {
+        height: 35px;
+    }
+    
+    .color-info {
+        font-size: 7px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 16px;
+    }
+    
+    h1 {
+        font-size: 1.75rem;
+    }
+    
+    .coordinate-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .user-actions {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    .user-actions button {
+        flex: 1;
+        margin: 0 4px;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus indicators */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --border-color: #ffffff;
+        --text-secondary: #ffffff;
+    }
 }
